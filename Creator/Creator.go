@@ -6,8 +6,9 @@ import (
 	"slices"
 )
 
-func Initialize() {
-	sudoko := Create()
+func Initialize(Level int) {
+	Count := CountForLevels(Level)
+	sudoko := Create(Count)
 
 	i := 0
 	for i < 1 {
@@ -15,16 +16,16 @@ func Initialize() {
 			writer.WriteInFile(&sudoko)
 			i++
 		} else {
-			sudoko = Create()
+			sudoko = Create(Count)
 		}
 	}
 
 }
 
-func Create() [9][9]byte {
+func Create(Count int) [9][9]byte {
 	sudoko := [9][9]byte{}
 
-	for i := 0; i < 45; i++ {
+	for i := 0; i < Count; i++ {
 		randNum := rand.Intn(9)
 		randNum += 1
 		randx := rand.Intn(9)
@@ -115,4 +116,17 @@ func Check(board [9][9]byte) bool {
 	}
 
 	return true
+}
+
+func CountForLevels(Level int) int {
+
+	if Level == 1 {
+		return 50
+	} else if Level == 2 {
+		return 45
+	} else if Level == 3 {
+		return 40
+	} else {
+		return 35
+	}
 }
