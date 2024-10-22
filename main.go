@@ -1,7 +1,7 @@
 package main
 
 import (
-	creator "Sudoko/Creator/Creator"
+	creator "Sudoku/Creator/Creator"
 	"fmt"
 )
 

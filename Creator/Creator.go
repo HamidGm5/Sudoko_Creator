@@ -1,29 +1,29 @@
 package creator
 
 import (
-	writer "Sudoko/Creator/Writer"
+	writer "Sudoku/Creator/Writer"
 	"math/rand"
 	"slices"
 )
 
 func Initialize(Level int) {
 	Count := CountForLevels(Level)
-	sudoko := Create(Count)
+	sudoku := Create(Count)
 
 	i := 0
 	for i < 1 {
-		if Check(sudoko) {
-			writer.WriteInFile(&sudoko)
+		if Check(sudoku) {
+			writer.WriteInFile(&sudoku)
 			i++
 		} else {
-			sudoko = Create(Count)
+			sudoku = Create(Count)
 		}
 	}
 
 }
 
 func Create(Count int) [9][9]byte {
-	sudoko := [9][9]byte{}
+	sudoku := [9][9]byte{}
 
 	for i := 0; i < Count; i++ {
 		randNum := rand.Intn(9)
@@ -31,18 +31,18 @@ func Create(Count int) [9][9]byte {
 		randx := rand.Intn(9)
 		randy := rand.Intn(9)
 
-		sudoko[randx][randy] = byte(randNum)
+		sudoku[randx][randy] = byte(randNum)
 	}
 
-	for i := 0; i < len(sudoko); i++ {
-		for j := 0; j < len(sudoko); j++ {
-			if sudoko[i][j] == 0 {
-				sudoko[i][j] = '.'
+	for i := 0; i < len(sudoku); i++ {
+		for j := 0; j < len(sudoku); j++ {
+			if sudoku[i][j] == 0 {
+				sudoku[i][j] = '.'
 			}
 		}
 	}
 
-	return sudoko
+	return sudoku
 }
 
 func Check(board [9][9]byte) bool {
