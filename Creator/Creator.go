@@ -8,21 +8,21 @@ import (
 
 func Initialize(Level int) {
 	Count := CountForLevels(Level)
-	sudoku := Create(Count)
+	sudoku := Genereate(Count)
 
 	i := 0
 	for i < 1 {
 		if Check(sudoku) {
-			writer.WriteInFile(&sudoku)
+			writer.WriteWithBoard(&sudoku)
 			i++
 		} else {
-			sudoku = Create(Count)
+			sudoku = Genereate(Count)
 		}
 	}
 
 }
 
-func Create(Count int) [9][9]byte {
+func Genereate(Count int) [9][9]byte {
 	sudoku := [9][9]byte{}
 
 	for i := 0; i < Count; i++ {
