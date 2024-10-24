@@ -14,7 +14,7 @@ func main() {
 	fmt.Println("3- Normal")
 	fmt.Println("4- Hard")
 
-	var Level int = 2
+	var Level int
 
 	_, err := fmt.Scanf("%d", &Level)
 

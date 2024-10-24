@@ -121,12 +121,12 @@ func Check(board [9][9]byte) bool {
 func CountForLevels(Level int) int {
 
 	if Level == 1 {
-		return 50
-	} else if Level == 2 {
 		return 45
-	} else if Level == 3 {
+	} else if Level == 2 {
 		return 40
-	} else {
+	} else if Level == 3 {
 		return 35
+	} else {
+		return 30
 	}
 }
