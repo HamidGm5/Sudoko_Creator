@@ -8,7 +8,7 @@ import (
 
 func WriteWithBoard(board *[9][9]byte) {
 
-	file, err := os.OpenFile("./Boards/boards.txt", 1, os.ModeAppend)
+	file, err := os.OpenFile("./Boards/Randomboards.txt", 1, os.ModeAppend)
 	charCounter := 0
 	colCounter := 0
 
