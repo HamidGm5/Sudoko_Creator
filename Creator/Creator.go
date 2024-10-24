@@ -13,7 +13,7 @@ func Initialize(Level int) {
 	i := 0
 	for i < 1 {
 		if Check(sudoku) {
-			writer.WriteWithBoard(&sudoku)
+			writer.WriteWithBoard(&sudoku, "RandomBoards.txt")
 			i++
 		} else {
 			sudoku = Genereate(Count)

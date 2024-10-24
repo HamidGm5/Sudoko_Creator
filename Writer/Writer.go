@@ -5,9 +5,10 @@ import (
 	"strconv"
 )
 
-func WriteWithBoard(board *[9][9]byte) {
+func WriteWithBoard(board *[9][9]byte, filename string) {
 
-	file, err := os.OpenFile("./Boards/Randomboards.txt", 1, os.ModeAppend)
+	path := "./Boards/" + filename
+	file, err := os.OpenFile(path, 1, os.ModeAppend)
 	charCounter := 0
 	colCounter := 0
 

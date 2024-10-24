@@ -1,4 +1,4 @@
-package controller
+package repository
 
 import (
 	models "Sudoku/Creator/Models"
@@ -9,19 +9,18 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type sudokuCollection struct {
-	sudokus *mongo.Collection
+type SudokuCollection struct {
+	Sudoku *mongo.Collection
 }
 
 var (
-	DataBase         string = "Sudoku_Generator"
-	SudokuCollection string = "Sudokus"
+	DataBase string = "Sudoku_Generator"
 )
 
-func (sc *sudokuCollection) Sudokus() []models.SudokuModel {
+func (sc *SudokuCollection) Sudokus() []models.SudokuModel {
 	sudokus := []models.SudokuModel{}
 
-	res, err := sc.sudokus.Find(context.Background(), bson.D{})
+	res, err := sc.Sudoku.Find(context.Background(), bson.D{})
 
 	if err != nil {
 		panic(err)
@@ -36,10 +35,10 @@ func (sc *sudokuCollection) Sudokus() []models.SudokuModel {
 	return sudokus
 }
 
-func (sc *sudokuCollection) GetSudokusByNumber(number int) models.SudokuModel {
+func (sc *SudokuCollection) GetSudokusByNumber(number int) models.SudokuModel {
 	var sudoku models.SudokuModel
 
-	err := sc.sudokus.FindOne(context.Background(), bson.D{{Key: "number", Value: number}}).Decode(&sudoku)
+	err := sc.Sudoku.FindOne(context.Background(), bson.D{{Key: "number", Value: number}}).Decode(&sudoku)
 
 	if err != nil {
 		panic(err)
@@ -48,10 +47,10 @@ func (sc *sudokuCollection) GetSudokusByNumber(number int) models.SudokuModel {
 	return sudoku
 }
 
-func (sc *sudokuCollection) GetLastNumber() int64 {
+func (sc *SudokuCollection) GetLastNumber() int64 {
 	var count int64
 	opts := options.Count().SetHint("_id")
-	count, err := sc.sudokus.CountDocuments(context.Background(), bson.D{}, opts)
+	count, err := sc.Sudoku.CountDocuments(context.Background(), bson.D{}, opts)
 
 	if err != nil {
 		panic(err)
@@ -59,14 +58,14 @@ func (sc *sudokuCollection) GetLastNumber() int64 {
 	return count
 }
 
-func (sc *sudokuCollection) InsertSudoku(sm *models.SudokuModel) error {
+func (sc *SudokuCollection) InsertSudoku(sm *models.SudokuModel) error {
 	var duplicate models.SudokuModel
 	filter := bson.A{
 		"$and",
 		bson.D{{Key: "digits", Value: sm.Digits}},
 		bson.D{{Key: "location", Value: sm.Location}},
 	}
-	err := sc.sudokus.FindOne(context.Background(), filter).Decode(&duplicate)
+	err := sc.Sudoku.FindOne(context.Background(), filter).Decode(&duplicate)
 
 	if err != nil {
 		return err
@@ -76,15 +75,15 @@ func (sc *sudokuCollection) InsertSudoku(sm *models.SudokuModel) error {
 		return nil
 	}
 
-	_, err = sc.sudokus.InsertOne(context.Background(), &sm)
+	_, err = sc.Sudoku.InsertOne(context.Background(), &sm)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sc *sudokuCollection) DeleteSudokuById(ID string) (bool, error) {
-	res, err := sc.sudokus.DeleteOne(context.Background(), bson.D{{Key: "_id", Value: ID}})
+func (sc *SudokuCollection) DeleteSudokuById(ID string) (bool, error) {
+	res, err := sc.Sudoku.DeleteOne(context.Background(), bson.D{{Key: "_id", Value: ID}})
 
 	if err != nil {
 		return false, err
