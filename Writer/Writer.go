@@ -1,7 +1,6 @@
 package writer
 
 import (
-	models "Sudoku/Creator/Models"
 	"os"
 	"strconv"
 )
@@ -49,8 +48,4 @@ func WriteWithBoard(board *[9][9]byte) {
 	file.WriteString("\t------------------------------------------------- \n")
 	file.WriteString("\n")
 	file.WriteString("\n")
-}
-
-func WriteWithModel(sm *models.SudokuModel) {
-
 }
