@@ -9,10 +9,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetSudokuWithNumber(collection *mongo.Collection, Number int) [9][9]byte {
+type SudokuCollection struct {
+	collection *mongo.Collection
+}
+
+func (sc *SudokuCollection) GetSudokuWithNumber(Number int) [9][9]byte {
 	board := [9][9]byte{}
 
-	repo := repository.SudokuCollection{Sudoku: collection}
+	repo := repository.SudokuCollection{Sudoku: sc.collection}
 
 	sudoku := repo.GetSudokusByNumber(Number)
 
@@ -40,7 +44,7 @@ func GetSudokuWithNumber(collection *mongo.Collection, Number int) [9][9]byte {
 	return board
 }
 
-func InsertSudoku(collection *mongo.Collection, board [9][9]byte) error {
+func (sc *SudokuCollection) InsertSudoku(board [9][9]byte) error {
 	Digits := ""
 	Location := ""
 
@@ -54,7 +58,7 @@ func InsertSudoku(collection *mongo.Collection, board [9][9]byte) error {
 		}
 	}
 
-	repo := repository.SudokuCollection{Sudoku: collection}
+	repo := repository.SudokuCollection{Sudoku: sc.collection}
 
 	var NewSudoku models.SudokuModel
 
@@ -68,4 +72,26 @@ func InsertSudoku(collection *mongo.Collection, board [9][9]byte) error {
 		return err
 	}
 	return nil
+}
+
+func (sc *SudokuCollection) DeleteSudokuById(ID string) (bool, error) {
+
+	repo := repository.SudokuCollection{Sudoku: sc.collection}
+	res, err := repo.DeleteSudokuById(ID)
+
+	if err != nil {
+		return false, err
+	}
+	return res, nil
+}
+
+func (sc *SudokuCollection) DeleteSudokuByNumber(Number int) (bool, error) {
+	repo := repository.SudokuCollection{Sudoku: sc.collection}
+
+	res, err := repo.DeleteSudokuWithNumber(Number)
+
+	if err != nil {
+		return false, err
+	}
+	return res, nil
 }

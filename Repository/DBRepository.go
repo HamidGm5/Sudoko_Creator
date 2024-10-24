@@ -94,3 +94,18 @@ func (sc *SudokuCollection) DeleteSudokuById(ID string) (bool, error) {
 	}
 	return false, nil
 }
+
+func (sc *SudokuCollection) DeleteSudokuWithNumber(Number int) (bool, error) {
+
+	res, err := sc.Sudoku.DeleteOne(context.Background(), bson.D{{Key: "number", Value: Number}})
+
+	if err != nil {
+		return false, err
+	}
+
+	if res.DeletedCount < 1 {
+		return false, nil
+	}
+
+	return true, nil
+}
