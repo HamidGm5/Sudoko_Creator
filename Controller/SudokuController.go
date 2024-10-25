@@ -10,13 +10,13 @@ import (
 )
 
 type SudokuCollection struct {
-	collection *mongo.Collection
+	Collection *mongo.Collection
 }
 
 func (sc *SudokuCollection) GetSudokuWithNumber(Number int) [9][9]byte {
 	board := [9][9]byte{}
 
-	repo := repository.SudokuCollection{Sudoku: sc.collection}
+	repo := repository.SudokuCollection{Sudoku: sc.Collection}
 
 	sudoku := repo.GetSudokusByNumber(Number)
 
@@ -51,21 +51,21 @@ func (sc *SudokuCollection) InsertSudoku(board [9][9]byte) error {
 	for i := 0; i < len(board); i++ {
 		for j := 0; j < len(board[i]); j++ {
 			if board[i][j] != '.' {
-				Digits += string(board[i][j])
+				Digits += strconv.Itoa(int(board[i][j]))
 				Location += strconv.Itoa(i)
 				Location += strconv.Itoa(j)
 			}
 		}
 	}
 
-	repo := repository.SudokuCollection{Sudoku: sc.collection}
+	repo := repository.SudokuCollection{Sudoku: sc.Collection}
 
 	var NewSudoku models.SudokuModel
 
 	NewSudoku.ID = uuid.NewString()
 	NewSudoku.Digits = Digits
 	NewSudoku.Location = Location
-	NewSudoku.Number = int32(repo.GetLastNumber())
+	NewSudoku.Number = int32(repo.GetLastNumber()) + 1
 
 	err := repo.InsertSudoku(&NewSudoku)
 	if err != nil {
@@ -76,7 +76,7 @@ func (sc *SudokuCollection) InsertSudoku(board [9][9]byte) error {
 
 func (sc *SudokuCollection) DeleteSudokuById(ID string) (bool, error) {
 
-	repo := repository.SudokuCollection{Sudoku: sc.collection}
+	repo := repository.SudokuCollection{Sudoku: sc.Collection}
 	res, err := repo.DeleteSudokuById(ID)
 
 	if err != nil {
@@ -86,7 +86,7 @@ func (sc *SudokuCollection) DeleteSudokuById(ID string) (bool, error) {
 }
 
 func (sc *SudokuCollection) DeleteSudokuByNumber(Number int) (bool, error) {
-	repo := repository.SudokuCollection{Sudoku: sc.collection}
+	repo := repository.SudokuCollection{Sudoku: sc.Collection}
 
 	res, err := repo.DeleteSudokuWithNumber(Number)
 

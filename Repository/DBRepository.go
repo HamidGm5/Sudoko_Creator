@@ -13,10 +13,6 @@ type SudokuCollection struct {
 	Sudoku *mongo.Collection
 }
 
-var (
-	DataBase string = "Sudoku_Generator"
-)
-
 func (sc *SudokuCollection) Sudokus() []models.SudokuModel {
 	sudokus := []models.SudokuModel{}
 
@@ -49,12 +45,13 @@ func (sc *SudokuCollection) GetSudokusByNumber(number int) models.SudokuModel {
 
 func (sc *SudokuCollection) GetLastNumber() int64 {
 	var count int64
-	opts := options.Count().SetHint("_id")
+	opts := options.Count().SetHint("_id_")
 	count, err := sc.Sudoku.CountDocuments(context.Background(), bson.D{}, opts)
 
 	if err != nil {
 		panic(err)
 	}
+
 	return count
 }
 
@@ -65,17 +62,14 @@ func (sc *SudokuCollection) InsertSudoku(sm *models.SudokuModel) error {
 		bson.D{{Key: "digits", Value: sm.Digits}},
 		bson.D{{Key: "location", Value: sm.Location}},
 	}
-	err := sc.Sudoku.FindOne(context.Background(), filter).Decode(&duplicate)
-
-	if err != nil {
-		return err
-	}
+	sc.Sudoku.FindOne(context.Background(), filter).Decode(&duplicate)
 
 	if duplicate.ID != "" {
 		return nil
 	}
 
-	_, err = sc.Sudoku.InsertOne(context.Background(), &sm)
+	_, err := sc.Sudoku.InsertOne(context.Background(), &sm)
+
 	if err != nil {
 		return err
 	}

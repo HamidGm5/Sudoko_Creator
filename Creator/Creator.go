@@ -6,7 +6,7 @@ import (
 	"slices"
 )
 
-func Initialize(Level int) {
+func Initialize(Level int) [9][9]byte {
 	Count := CountForLevels(Level)
 	sudoku := Genereate(Count)
 
@@ -15,11 +15,12 @@ func Initialize(Level int) {
 		if Check(sudoku) {
 			writer.WriteWithBoard(&sudoku, "RandomBoards.txt")
 			i++
+			return sudoku
 		} else {
 			sudoku = Genereate(Count)
 		}
 	}
-
+	return sudoku
 }
 
 func Genereate(Count int) [9][9]byte {
