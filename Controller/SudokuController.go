@@ -25,20 +25,27 @@ func (sc *SudokuCollection) GetSudokuWithNumber(Number int) [9][9]byte {
 	yPointer := 1
 	xAxis := 0
 	yAxis := 1
-
 	digit := 0
 
 	for digitPointer < len(sudoku.Digits) {
 
-		digit = int(sudoku.Digits[digitPointer])
-		xAxis = int(sudoku.Location[xPointer])
-		yAxis = int(sudoku.Location[yPointer])
+		digit, _ = strconv.Atoi(string(sudoku.Digits[digitPointer]))
+		xAxis, _ = strconv.Atoi(string(sudoku.Location[xPointer]))
+		yAxis, _ = strconv.Atoi(string(sudoku.Location[yPointer]))
 
 		board[xAxis][yAxis] = byte(digit)
 
 		xPointer += 2
-		yPointer += xPointer + 1
+		yPointer = xPointer + 1
 		digitPointer++
+	}
+
+	for i := len(board) - 1; i >= 0; i-- {
+		for j := len(board) - 1; j >= 0; j-- {
+			if board[i][j] == 0 {
+				board[i][j] = '.'
+			}
+		}
 	}
 
 	return board

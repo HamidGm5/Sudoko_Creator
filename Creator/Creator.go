@@ -1,7 +1,6 @@
 package creator
 
 import (
-	writer "Sudoku/Creator/Writer"
 	"math/rand"
 	"slices"
 )
@@ -13,7 +12,6 @@ func Initialize(Level int) [9][9]byte {
 	i := 0
 	for i < 1 {
 		if Check(sudoku) {
-			writer.WriteWithBoard(&sudoku, "RandomBoards.txt")
 			i++
 			return sudoku
 		} else {
