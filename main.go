@@ -4,11 +4,11 @@ import (
 	controller "Sudoku/Creator/Controller"
 	creator "Sudoku/Creator/Creator"
 	writer "Sudoku/Creator/Writer"
-	"bytes"
 	"context"
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -34,7 +34,7 @@ func Start() {
 	fmt.Println("2-Random")
 
 	var choose int = 0
-	_, err := fmt.Scanf("%d", &choose)
+	_, err := fmt.Scan(&choose)
 
 	if err != nil {
 		Restart()
@@ -42,9 +42,10 @@ func Start() {
 
 	if choose == 1 {
 
-		var number int = 0
-		fmt.Println("Enter number of your sudoku you want : ")
-		_, err = fmt.Scanf("%d", &number)
+		var number int
+		fmt.Print("Enter number of your sudoku you want : ")
+		_, err = fmt.Scan(&number)
+		fmt.Println()
 
 		if err != nil {
 			Restart()
@@ -67,6 +68,7 @@ func Start() {
 
 		writer.WriteWithBoard(&board, "ConstantBoards.txt")
 		fmt.Println("Your sudoku written")
+
 	} else if choose == 2 {
 
 		fmt.Println("Enter level for random sudoku ")
@@ -75,7 +77,11 @@ func Start() {
 		fmt.Println("3- Normal")
 		fmt.Println("4- Hard")
 
-		fmt.Scanf("choose :", &choose)
+		_, err := fmt.Scan(&choose)
+
+		if err != nil {
+			Restart()
+		}
 
 		if choose < 5 && choose > 0 {
 			fmt.Println("Please Waiting ...")
@@ -95,15 +101,19 @@ func Start() {
 }
 
 func Restart() {
-	fmt.Println("if you want play again enter Y and for close game enter N")
-	var choose byte
-	_, err := fmt.Scanf("%c", &choose)
+	log.Print("Your input was wrong !")
+	fmt.Println()
+	fmt.Print("if you want play again enter Y and for close game enter N : ")
+
+	var choose string
+	_, err := fmt.Scan(&choose)
+	fmt.Println()
 
 	if err != nil {
-		os.Exit(0)
+		log.Fatal(err)
 	}
 
-	if bytes.ToLower([]byte{choose})[0] == 'y' {
+	if strings.ToLower(choose) == "y" {
 		Start()
 	}
 	os.Exit(0)
